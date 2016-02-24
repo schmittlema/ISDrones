@@ -2,6 +2,9 @@ import pygame, sys
 from pygame.locals import *
 import random
 import time
+import math
+from sympy import *
+from sympy.geometry import *
 
 #colors:
 WHITE=(255,255,255)
@@ -13,6 +16,7 @@ coursesize=(500,400) #size of the viewing window
 obstsize= 50 #max radius of obstacle
 quadsize= 25 #radius of the quad
 num_obstacle=5 #number of obstacles in the environment
+sensor_max=300 #max distance the sensor is able to detect
 
 class obstacle:
     '''a basic circular obstacle
@@ -22,6 +26,7 @@ class obstacle:
         self.x=random.randrange(0,coursesize[0])
         self.y=random.randrange(0,coursesize[1])
         self.color=RED
+        self.geo=Circle(Point(self.x,self.y),self.rad)
 
 class quad():
     '''a basic quad w/o sonar sensors
@@ -29,13 +34,84 @@ class quad():
     def __init__(self):
         self.rad=quadsize
         self.color=BLACK
-        self.x=0
+        self.x=0 #place quad at bottom center of screen
         self.y=0
-        
-    
-def getdata():
-    '''updates s1, s2, s3
-    '''
+        self.s1=0 #60 degrees CC
+        self.s2=0 #straight ahead
+        self.s3=0 #60 degrees C
+        self.head=0 #face north, will be measured in radians
+    def sense(self):
+        #initialize sensors to 0, the default
+        s1=0
+        s2=0
+        s3=0
+        head=self.head
+        #direction each sensor is pointing
+        m1=head-math.pi/3
+        m2=head
+        m3=head+pi/3
+        start1=Point(self.x+quadsize*math.cos(m1),self.y+quadsize*math.sin(m1))
+        start2=Point(self.x+quadsize*math.cos(m2),self.y+quadsize*math.sin(m2))
+        start3=Point(self.x+quadsize*math.cos(m3),self.y+quadsize*math.sin(m3))
+        stop1=Point(self.x+(quadsize+sensor_max)*math.cos(m1),self.y+(quadsize+sensor_max)*math.sin(m1))
+        stop2=Point(self.x+(quadsize+sensor_max)*math.cos(m2),self.y+(quadsize+sensor_max)*math.sin(m2))
+        stop3=Point(self.x+(quadsize+sensor_max)*math.cos(m3),self.y+(quadsize+sensor_max)*math.sin(m3))
+        #segment representing the viewing range of each sensor
+        ray1=Segment(start1, stop1)
+        ray2=Segment(start2, stop2)
+        ray3=Segment(start3, stop3)
+        global obs
+        for obstacle in obs:
+            sense1=intersection(ray1,obstacle.geo)
+            sense2=intersection(ray2,obstacle.geo)
+            sense3=intersection(ray3,obstacle.geo)
+            if sense1:
+                for point in sense1:
+                    point=point.evalf()
+                    d1=sensor_max-(point.distance(start1))
+                    if d1>s1:
+                        s1=int(d1)
+            if sense2:
+                for point in sense2:
+                    point=point.evalf()
+                    d2=sensor_max-(point.distance(start1))
+                    if d2>s2:
+                        s2=int(d2)
+            if sense3:
+                for point in sense3:
+                    point=point.evalf()
+                    d3=sensor_max-(point.distance(start3))
+                    if d3>s3:
+                        s3=int(d3)
+            #check for intersection, if there is an intersection,
+            #report the closest distance
+        self.s1=s1
+        self.s2=s2
+        self.s3=s3
+
+##def sense():
+##    global quad1
+##    global obs
+##    s1=0
+##    h1=quad1.head-math.pi/3
+##    x=quad1.x
+##    y=quad1.y
+##    r_1=(math.cos(h1),math.sin(h1))
+##    for i in range(sensor_max):
+##        x=r_1[0]*(quadsize+i)
+##        y=r_1[1]*(quadsize+i)
+##        for obstacle in obs:
+##            obs_x=obstacle.x
+##            obs_y=obstacle.y
+##            obs_rad=obstacle.rad
+##            if Point(x,y).distance(Point(obs_x,obs_y))<obs_rad:
+##                #ray has made a hit
+##                d=100-i
+##                if d>s1:
+##                    s1=int(d)
+##    quad1.s1=s1
+                
+            
 
 def draw(obj):
     '''draw a circular object in the window
@@ -59,8 +135,8 @@ def update(quad):
     '''
     x=quad.x
     y=quad.x
-    x+=1
-    y+=1
+    x+=5
+    y+=5
     quad.x=x
     quad.y=y
 
@@ -92,6 +168,7 @@ def drawobstacles():
     for i in range(num_obstacle):
           draw(obs[i])
     
+    
 def main():
     '''main function
     '''
@@ -105,7 +182,12 @@ def main():
                 sys.exit()
         update(quad1)
         drawenvironment()
-        time.sleep(.01)
+        start=time.time()
+        quad1.sense()
+        stop=time.time()
+        #print(stop-start)
+        print(quad1.s1, quad1.s2,quad1.s3)
+        #time.sleep(0.01)
 
 main()
                 
