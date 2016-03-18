@@ -28,7 +28,7 @@ GREEN = (0,255,0)
 
 #experimental parameters
 coursesize=(500,400) #size of the viewing windo	w
-sensor_max=300 #max distance the sensor is able to detect
+sensor_max=100 #max distance the sensor is able to detect
 
 
 class Parent(object):
@@ -68,7 +68,7 @@ class Quad(Parent):
 	head = (math.pi *7)/4
 
 	def __init__(self):
-        	self.rad=Quad_size
+                self.rad=Quad_size
         	self.color=BLACK
         	self.x=0 #place quad at bottom center of screen
         	self.y=0
@@ -77,19 +77,22 @@ class Quad(Parent):
                 r_1=[math.cos(self.head),math.sin(self.head)]
                 r_2=[math.cos(self.head+math.pi/3),math.sin(self.head+math.pi/3)]
                 r_3=[math.cos(self.head-math.pi/3),math.sin(self.head-math.pi/3)]
-                x1=(r_1[0]*(Quad_size))+self.x
-	        y1=(r_1[1]*-1*(Quad_size))+self.y
-	        x2=(r_2[0]*(Quad_size))+self.x
-	        y2=(r_2[1]*-1*(Quad_size))+self.y
-                x3=(r_3[0]*(Quad_size))+self.x
-	        y3=(r_3[1]*-1*(Quad_size))+self.y
+                x1=(r_1[0]*(Quad_size+sensor_max))+self.x
+	        y1=(r_1[1]*-1*(Quad_size+sensor_max))+self.y
+	        x2=(r_2[0]*(Quad_size+sensor_max))+self.x
+	        y2=(r_2[1]*-1*(Quad_size+sensor_max))+self.y
+                x3=(r_3[0]*(Quad_size+sensor_max))+self.x
+	        y3=(r_3[1]*-1*(Quad_size+sensor_max))+self.y
 		pygame.draw.circle(screen,self.color,(self.x,self.y),self.rad)
 		pygame.draw.line(screen,GREEN,(self.x,self.y),(x1,y1),1)
                 pygame.draw.line(screen,GREEN,(self.x,self.y),(x2,y2),1)
                 pygame.draw.line(screen,GREEN,(self.x,self.y),(x3,y3),1)
 
         def intersect(self,x, y, obstacle):
-                return (x >= obstacle.x - obstacle.rad and x <= obstacle.x + obstacle.rad and y >= obstacle.y - obstacle.rad and y <= obstacle.y + obstacle.rad)
+                if math.sqrt((x-obstacle.x)**2+(y-obstacle.y)**2)<obstacle.rad:
+                        return True
+                else:
+                        return False
         
 
 	def sense(self,obstacles):
@@ -140,7 +143,7 @@ class Quad(Parent):
 		self.y-=int(math.sin(self.head) *5)
 	    
 
-def	updateEnvironment(obstacles,Quad):
+def updateEnvironment(obstacles,Quad):
 	global Num_Obst
 	screen.fill(WHITE)
 	Quad.draw()
@@ -176,8 +179,8 @@ def main():
 		q.update()
 		q.sense(obstacles)
 		updateEnvironment(obstacles,q)
+		time.sleep(.1)
 		#sprint q.x,q.y
 		print q.s1,q.s2,q.s3
-		time.sleep(.05)
 
 main()

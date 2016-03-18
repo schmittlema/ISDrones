@@ -40,54 +40,54 @@ class quad():
         self.s2=0 #straight ahead
         self.s3=0 #60 degrees C
         self.head=0 #face north, will be measured in radians
-    def sense(self):
-        #initialize sensors to 0, the default
-        s1=0
-        s2=0
-        s3=0
-        head=self.head
-        #direction each sensor is pointing
-        m1=head-math.pi/3
-        m2=head
-        m3=head+pi/3
-        start1=Point(self.x+quadsize*math.cos(m1),self.y+quadsize*math.sin(m1))
-        start2=Point(self.x+quadsize*math.cos(m2),self.y+quadsize*math.sin(m2))
-        start3=Point(self.x+quadsize*math.cos(m3),self.y+quadsize*math.sin(m3))
-        stop1=Point(self.x+(quadsize+sensor_max)*math.cos(m1),self.y+(quadsize+sensor_max)*math.sin(m1))
-        stop2=Point(self.x+(quadsize+sensor_max)*math.cos(m2),self.y+(quadsize+sensor_max)*math.sin(m2))
-        stop3=Point(self.x+(quadsize+sensor_max)*math.cos(m3),self.y+(quadsize+sensor_max)*math.sin(m3))
-        #segment representing the viewing range of each sensor
-        ray1=Segment(start1, stop1)
-        ray2=Segment(start2, stop2)
-        ray3=Segment(start3, stop3)
-        global obs
-        for obstacle in obs:
-            sense1=intersection(ray1,obstacle.geo)
-            sense2=intersection(ray2,obstacle.geo)
-            sense3=intersection(ray3,obstacle.geo)
-            if sense1:
-                for point in sense1:
-                    point=point.evalf()
-                    d1=sensor_max-(point.distance(start1))
-                    if d1>s1:
-                        s1=int(d1)
-            if sense2:
-                for point in sense2:
-                    point=point.evalf()
-                    d2=sensor_max-(point.distance(start1))
-                    if d2>s2:
-                        s2=int(d2)
-            if sense3:
-                for point in sense3:
-                    point=point.evalf()
-                    d3=sensor_max-(point.distance(start3))
-                    if d3>s3:
-                        s3=int(d3)
-            #check for intersection, if there is an intersection,
-            #report the closest distance
-        self.s1=s1
-        self.s2=s2
-        self.s3=s3
+##    def sense(self):
+##        #initialize sensors to 0, the default
+##        s1=0
+##        s2=0
+##        s3=0
+##        head=self.head
+##        #direction each sensor is pointing
+##        m1=head-math.pi/3
+##        m2=head
+##        m3=head+pi/3
+##        start1=Point(self.x+quadsize*math.cos(m1),self.y+quadsize*math.sin(m1))
+##        start2=Point(self.x+quadsize*math.cos(m2),self.y+quadsize*math.sin(m2))
+##        start3=Point(self.x+quadsize*math.cos(m3),self.y+quadsize*math.sin(m3))
+##        stop1=Point(self.x+(quadsize+sensor_max)*math.cos(m1),self.y+(quadsize+sensor_max)*math.sin(m1))
+##        stop2=Point(self.x+(quadsize+sensor_max)*math.cos(m2),self.y+(quadsize+sensor_max)*math.sin(m2))
+##        stop3=Point(self.x+(quadsize+sensor_max)*math.cos(m3),self.y+(quadsize+sensor_max)*math.sin(m3))
+##        #segment representing the viewing range of each sensor
+##        ray1=Segment(start1, stop1)
+##        ray2=Segment(start2, stop2)
+##        ray3=Segment(start3, stop3)
+##        global obs
+##        for obstacle in obs:
+##            sense1=intersection(ray1,obstacle.geo)
+##            sense2=intersection(ray2,obstacle.geo)
+##            sense3=intersection(ray3,obstacle.geo)
+##            if sense1:
+##                for point in sense1:
+##                    point=point.evalf()
+##                    d1=sensor_max-(point.distance(start1))
+##                    if d1>s1:
+##                        s1=int(d1)
+##            if sense2:
+##                for point in sense2:
+##                    point=point.evalf()
+##                    d2=sensor_max-(point.distance(start1))
+##                    if d2>s2:
+##                        s2=int(d2)
+##            if sense3:
+##                for point in sense3:
+##                    point=point.evalf()
+##                    d3=sensor_max-(point.distance(start3))
+##                    if d3>s3:
+##                        s3=int(d3)
+##            #check for intersection, if there is an intersection,
+##            #report the closest distance
+##        self.s1=s1
+##        self.s2=s2
+##        self.s3=s3
 
 ##def sense():
 ##    global quad1
@@ -110,7 +110,27 @@ class quad():
 ##                if d>s1:
 ##                    s1=int(d)
 ##    quad1.s1=s1
-                
+
+##def sense3():
+##    global quad1
+##    global obs
+##    #initialize sensors to 0, the default
+##    s1=0
+##    s2=0
+##    s3=0
+##    head=quad1.head
+##    #direction each sensor is pointing
+##    m1=head-math.pi/3
+##    m2=head
+##    m3=head+pi/3
+##    start1=Point(quad1.x+quadsize*math.cos(m1),quad1.y+quadsize*math.sin(m1))
+##    start2=Point(quad1.x+quadsize*math.cos(m2),quad1.y+quadsize*math.sin(m2))
+##    start3=Point(quad1.x+quadsize*math.cos(m3),quad1.y+quadsize*math.sin(m3))
+##    stop1=Point(quad1.x+(quadsize+sensor_max)*math.cos(m1),quad.y+(quadsize+sensor_max)*math.sin(m1))
+##    stop2=Point(quad1.x+(quadsize+sensor_max)*math.cos(m2),quad.y+(quadsize+sensor_max)*math.sin(m2))
+##    stop3=Point(quad1.x+(quadsize+sensor_max)*math.cos(m3),quad.y+(quadsize+sensor_max)*math.sin(m3))
+##    #direction vector from A to B
+##    D=x
             
 
 def draw(obj):
