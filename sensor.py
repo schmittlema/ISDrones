@@ -12,7 +12,7 @@ Quad_y = 0
 Quad_size = 25
 Quad_color = 1
 
-Num_Obst = 10
+Num_Obst = 0
 Obst_maxsize = 50
 Obst_minsize = 1
 
@@ -49,29 +49,35 @@ class Parent(object):
 	def gety(self):
 		return self.y
 
+
+class Finish(Parent):
+        #no code needed
+        test = 1
+        
 class Obstacle(Parent):
     '''a basic circular obstacle
     '''
     def __init__(self):
         self.rad=r.randrange(Obst_minsize,Obst_maxsize)
-        self.x=r.randrange(0,coursesize[0])
-        self.y=r.randrange(0,coursesize[1])
+        self.x=r.randrange(75,coursesize[0])
+        self.y=r.randrange(75,coursesize[1])
         #self.x = 100
         #self.y = 100
         self.color=RED
         self.geo=Circle(Point(self.x,self.y),self.rad)
+        action = 0
 
 class Quad(Parent):
 	s1 = 0
 	s2 = 0
 	s3 = 0
-	head = (math.pi *7)/4
+	head = 0 #(math.pi *7)/4
 
 	def __init__(self):
                 self.rad=Quad_size
         	self.color=BLACK
         	self.x=0 #place quad at bottom center of screen
-        	self.y=0
+        	self.y=200
 
         def draw(self):
                 r_1=[math.cos(self.head),math.sin(self.head)]
@@ -89,11 +95,15 @@ class Quad(Parent):
                 pygame.draw.line(screen,GREEN,(self.x,self.y),(x3,y3),1)
 
         def intersect(self,x, y, obstacle):
-                if math.sqrt((x-obstacle.x)**2+(y-obstacle.y)**2)<obstacle.rad:
-                        return True
-                else:
-                        return False
-        
+                return math.sqrt((x-obstacle.x)**2+(y-obstacle.y)**2)<obstacle.rad
+                
+
+        def crash(self):
+                return (self.y - self.rad <= 0) or (self.y+self.rad >=400)
+
+        def reset(self):
+                self.x = 0
+                self.y = 200
 
 	def sense(self,obstacles):
             self.s1=0
@@ -134,19 +144,28 @@ class Quad(Parent):
 	                    self.s3 = i
 	                    
 			
-	
+	def updateNetwork(self,reward):
+                z = 1
 	                    
-			
+	def reward(self,crash,win):
+                z = 1
+
+        def actionSelect(self,actions):
+                z = 1
+                
+        def runNetwork(self):
+                z = 1
+                
 	def update(self):
         #updates the x and y coordinates of the quad, contains the learning algorithm
 		self.x+=int(math.cos(self.head) *5)
 		self.y-=int(math.sin(self.head) *5)
 	    
 
-def updateEnvironment(obstacles,Quad):
-	global Num_Obst
+def updateEnvironment(obstacles,Quad,fin):
 	screen.fill(WHITE)
 	Quad.draw()
+	fin.draw()
 	for i in range(Num_Obst):
 		obstacles[i].draw()
 	pygame.display.update()
@@ -167,20 +186,41 @@ def makeObstacles():
 
 def main():
 	global win
+	global crash
+	global end
+	global reward
+	end = False
+	win = False
+	crash = False
 	q = Quad()
 	obstacles = makeObstacles()
 	initializeEnvironment()	
-
-	while(not(win)):
-		for event in pygame.event.get():
-			if event.type==QUIT:
-				pygame.quit()
-				sys.exit()
-		q.update()
-		q.sense(obstacles)
-		updateEnvironment(obstacles,q)
-		time.sleep(.1)
-		#sprint q.x,q.y
-		print q.s1,q.s2,q.s3
+	finish = Finish(475,200,20,GREEN)
+        while(not(end)):
+                q.reset()
+                win = False
+                crash = False
+                while(not(win)and not(crash)):
+                        for event in pygame.event.get():
+                                if event.type == pygame.KEYDOWN:
+                                        if event.key == pygame.K_e: #to stop siimulation press "e"
+                                                end = True
+                                if event.type==QUIT:
+                                        pygame.quit()
+                                        sys.exit()
+                        reward = 0
+                        q.update()
+                        q.sense(obstacles)
+                        updateEnvironment(obstacles,q,finish)
+                        time.sleep(.1)
+                        #print q.x,q.y
+                        #print q.s1,q.s2,q.s3
+                        if(q.intersect(q.x,q.y,finish)):
+                                win = True
+                        crash = q.crash()
+                        reward = q.reward(crash,win)
+                        q.updateNetwork(reward)
+			
+		
 
 main()
