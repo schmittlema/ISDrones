@@ -97,7 +97,7 @@ class Quad(Parent):
             s2 = 0
             s3 = 0
             head = 0 #m.pi/6
-            brain = MatrixRandomizeNeg(MatrixCreate(5,3))
+            brain = MatrixRandomizeNeg(MatrixCreate(11,12))
 
             def __init__(self):
                 self.rad=Quad_size
@@ -162,15 +162,15 @@ class Quad(Parent):
                         y3=(r_3[1]*-1*(Quad_size+i))+self.y
                         
                         for obstacle in obstacles:
-                                if not(s1done) and self.intersect(x1,y1,obstacle):
+                                if not(s1done) and (self.intersect(x1,y1,obstacle) or y1 <= 0 or y1 >= 400 or x1 >=500):
                                         #ray has made a hit
                                         self.s1 = i
                                         
-                                if not(s2done) and self.intersect(x2,y2,obstacle):
+                                if not(s2done) and (self.intersect(x2,y2,obstacle or y2 <= 0 or y2 >= 400 or x1 >=500)):
                                         #ray has made a hit
                                                 self.s2 = i
                                                 
-                                if not(s3done) and self.intersect(x3,y3,obstacle):
+                                if not(s3done) and (self.intersect(x3,y3,obstacle or y3 <= 0 or y3 >= 400 or x1 >=500)):
                                         #ray has made a hit
                                                 self.s3 = i
 	                    
@@ -194,17 +194,35 @@ class Quad(Parent):
 		
 
             def runNetwork(self):
+                #this is so gross, I am truly sorry
                 a1 = self.s1 * self.brain[0,0]+ self.s2 * self.brain[1,0]+ self.s3 * self.brain[2,0] + self.head * self.brain[3,0]
                 a2 = self.s1 * self.brain[0,1]+self.s2 * self.brain[1,1]+ self.s3 * self.brain[2,1] + self.head * self.brain[3,1]
                 a3 = self.s1 * self.brain[0,2]+self.s2 * self.brain[1,2]+self.s3 * self.brain[2,2] +self.head * self.brain[3,2]
-                output = a1 * self.brain[4,0]+a2*self.brain[4,1]+a3*self.brain[4,2]
+                a4 = self.s1 * self.brain[0,3]+self.s2 * self.brain[1,3]+self.s3 * self.brain[2,3] +self.head * self.brain[3,3]
+                a5 = self.s1 * self.brain[0,4]+self.s2 * self.brain[1,4]+self.s3 * self.brain[2,4] +self.head * self.brain[3,4]
+                a6 = self.s1 * self.brain[0,5]+self.s2 * self.brain[1,5]+self.s3 * self.brain[2,5] +self.head * self.brain[3,5]
+                a7 = self.s1 * self.brain[0,6]+self.s2 * self.brain[1,6]+self.s3 * self.brain[2,6] +self.head * self.brain[3,6]
+                a8 = self.s1 * self.brain[0,7]+self.s2 * self.brain[1,7]+self.s3 * self.brain[2,7] +self.head * self.brain[3,7]
+
+                b1 = a1 * self.brain[4,0] + a2 * self.brain[4,1] +a3 * self.brain[4,2] + a3 * self.brain[4,2] + a4 * self.brain[4,3] + a5 * self.brain[4,4] + a6*self.brain[4,5] + a7*self.brain[4,6]+ a8*self.brain[4,7]
+                b2 = a1 * self.brain[5,0] + a2 * self.brain[5,1] +a3 * self.brain[5,2] + a3 * self.brain[5,2] + a4 * self.brain[5,3] + a5 * self.brain[5,4]+ a6*self.brain[5,5] + a7*self.brain[5,6]+ a8*self.brain[5,7]
+                b3 = a1 * self.brain[6,0] + a2 * self.brain[6,1] +a3 * self.brain[6,2] + a3 * self.brain[6,2] + a4 * self.brain[6,3] + a5 * self.brain[6,4]+ a6*self.brain[6,5] + a7*self.brain[6,6]+ a8*self.brain[6,7]
+                b4 = a1 * self.brain[7,0] + a2 * self.brain[7,1] +a3 * self.brain[7,2] + a3 * self.brain[7,2] + a4 * self.brain[7,3] + a5 * self.brain[7,4]+ a6*self.brain[7,5] + a7*self.brain[7,6]+ a8*self.brain[7,7]
+                b5 = a1 * self.brain[8,0] + a2 * self.brain[8,1] +a3 * self.brain[8,2] + a3 * self.brain[8,2] + a4 * self.brain[8,3] + a5 * self.brain[8,4]+ a6*self.brain[8,5] + a7*self.brain[8,6]+ a8*self.brain[8,7]
+                b6 = a1 * self.brain[9,0] + a2 * self.brain[9,1] +a3 * self.brain[9,2] + a3 * self.brain[9,2] + a4 * self.brain[9,3] + a5 * self.brain[9,4]+ a6*self.brain[9,5] + a7*self.brain[9,6]+ a8*self.brain[9,7]
+
+                c1 = b1 * self.brain[4,8]+b2*self.brain[5,8]+b3*self.brain[6,8] + b4 * self.brain[7,8]+ b5 * self.brain[8,8]+ b6 * self.brain[9,8]
+                c2 = b1 * self.brain[4,9]+b2*self.brain[5,9]+b3*self.brain[6,9] + b4 * self.brain[7,9]+ b5 * self.brain[8,9]+ b6 * self.brain[9,9]
+                c3 = b1 * self.brain[4,10]+b2*self.brain[5,10]+b3*self.brain[6,10] + b4 * self.brain[7,10]+ b5 * self.brain[8,10]+ b6 * self.brain[9,10]
+                c4 = b1 * self.brain[4,11]+b2*self.brain[5,11]+b3*self.brain[6,11] + b4 * self.brain[7,11]+ b5 * self.brain[8,11]+ b6 * self.brain[9,11]
+
+                output = c1 * self.brain[10,8]+ c2 * self.brain[10,9] + c3 * self.brain[10,10]+ c4 * self.brain[10,11]
                 if output >= 1:
                         return 1
                 if output > -1 and output < 1:
                         return 0
                 else:
                         return -1
-
 
 
 
@@ -256,7 +274,7 @@ def run(delay,obstacles,finish,child):
                 updateEnvironment(obstacles,child,finish)
                 if(child.intersect(child.x,child.y,finish)):
                         win = True
-                if(forwardprogress > 12):
+                if(forwardprogress > 15):
                         forward = False
                 crash = child.crash(obstacles)
                 time.sleep(delay)
@@ -266,7 +284,7 @@ def main():
 	Generations = 1000
 	global crash
 	parent = Quad()
-	child = parent
+	child = cp.deepcopy(parent)
 	obstacles = makeObstacles()
 	initializeEnvironment()	
 	finish = Finish(475,200,20,GREEN)
@@ -275,24 +293,21 @@ def main():
 	global forwardprogress
 	global forward
 	parentgen = 0
-	#forward = True
+	learningrate = .5
         for currentGeneration in range (Generations):
                 run(0,obstacles,finish,child)
                 
                 fitnessnew = child.reward(crash,win,forward)
-                print currentGeneration, fitnessnew,fitnessold
+                print currentGeneration, fitnessnew,fitnessold, learningrate
 		if (fitnessnew > fitnessold):
-                        child.brain = cp.copy(MatrixPerturb(parent.brain,0.9))
-                        printMatrix(parent.brain)
-                        print "----------------------------------------------------"
                         parent.brain = cp.deepcopy(child.brain)
-                        printMatrix(child.brain)
-                        print " ---------------------------------------------------"
-                        printMatrix(parent.brain)
                         parentgen = currentGeneration
                         fitnessold = fitnessnew
-               	child.brain = cp.copy(MatrixPerturb(parent.brain,0.1))
-        run(.1,obstacles,finish,parent)
+                        learningrate = learningrate - .0075
+                
+               	child.brain = MatrixPerturb(parent.brain,learningrate)
+               
+        run(.08,obstacles,finish,parent)
         print parentgen, fitnessold
         printMatrix(parent.brain)
 
