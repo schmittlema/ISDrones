@@ -97,7 +97,7 @@ class Quad(Parent):
             s2 = 0
             s3 = 0
             head = 0 #m.pi/6
-            brain = MatrixRandomizeNeg(MatrixCreate(11,12))
+            brain = MatrixRandomizeNeg(MatrixCreate(10,17))
 
             def __init__(self):
                 self.rad=Quad_size
@@ -203,20 +203,25 @@ class Quad(Parent):
                 a6 = self.s1 * self.brain[0,5]+self.s2 * self.brain[1,5]+self.s3 * self.brain[2,5] +self.head * self.brain[3,5]
                 a7 = self.s1 * self.brain[0,6]+self.s2 * self.brain[1,6]+self.s3 * self.brain[2,6] +self.head * self.brain[3,6]
                 a8 = self.s1 * self.brain[0,7]+self.s2 * self.brain[1,7]+self.s3 * self.brain[2,7] +self.head * self.brain[3,7]
+                
+                a9 = self.s1 * self.brain[0,8]+ self.s2 * self.brain[1,8]+ self.s3 * self.brain[2,8] + self.head * self.brain[3,8]
+                a10 = self.s1 * self.brain[0,9]+self.s2 * self.brain[1,9]+ self.s3 * self.brain[2,9] + self.head * self.brain[3,9]
+                a11= self.s1 * self.brain[0,10]+self.s2 * self.brain[1,10]+self.s3 * self.brain[2,10] +self.head * self.brain[3,10]
+                a12 = self.s1 * self.brain[0,11]+self.s2 * self.brain[1,11]+self.s3 * self.brain[2,11] +self.head * self.brain[3,11]
+                a13 = self.s1 * self.brain[0,12]+self.s2 * self.brain[1,12]+self.s3 * self.brain[2,12] +self.head * self.brain[3,12]
+                a14 = self.s1 * self.brain[0,13]+self.s2 * self.brain[1,13]+self.s3 * self.brain[2,13] +self.head * self.brain[3,13]
+                a15 = self.s1 * self.brain[0,14]+self.s2 * self.brain[1,14]+self.s3 * self.brain[2,14] +self.head * self.brain[3,14]
+                a16 = self.s1 * self.brain[0,15]+self.s2 * self.brain[1,15]+self.s3 * self.brain[2,15] +self.head * self.brain[3,15]
 
-                b1 = a1 * self.brain[4,0] + a2 * self.brain[4,1] +a3 * self.brain[4,2] + a3 * self.brain[4,2] + a4 * self.brain[4,3] + a5 * self.brain[4,4] + a6*self.brain[4,5] + a7*self.brain[4,6]+ a8*self.brain[4,7]
-                b2 = a1 * self.brain[5,0] + a2 * self.brain[5,1] +a3 * self.brain[5,2] + a3 * self.brain[5,2] + a4 * self.brain[5,3] + a5 * self.brain[5,4]+ a6*self.brain[5,5] + a7*self.brain[5,6]+ a8*self.brain[5,7]
-                b3 = a1 * self.brain[6,0] + a2 * self.brain[6,1] +a3 * self.brain[6,2] + a3 * self.brain[6,2] + a4 * self.brain[6,3] + a5 * self.brain[6,4]+ a6*self.brain[6,5] + a7*self.brain[6,6]+ a8*self.brain[6,7]
-                b4 = a1 * self.brain[7,0] + a2 * self.brain[7,1] +a3 * self.brain[7,2] + a3 * self.brain[7,2] + a4 * self.brain[7,3] + a5 * self.brain[7,4]+ a6*self.brain[7,5] + a7*self.brain[7,6]+ a8*self.brain[7,7]
-                b5 = a1 * self.brain[8,0] + a2 * self.brain[8,1] +a3 * self.brain[8,2] + a3 * self.brain[8,2] + a4 * self.brain[8,3] + a5 * self.brain[8,4]+ a6*self.brain[8,5] + a7*self.brain[8,6]+ a8*self.brain[8,7]
-                b6 = a1 * self.brain[9,0] + a2 * self.brain[9,1] +a3 * self.brain[9,2] + a3 * self.brain[9,2] + a4 * self.brain[9,3] + a5 * self.brain[9,4]+ a6*self.brain[9,5] + a7*self.brain[9,6]+ a8*self.brain[9,7]
+                b1 = a1 * self.brain[4,0] + a2 * self.brain[4,1] +a3 * self.brain[4,2] + a4 * self.brain[4,3] + a5 * self.brain[4,4] + a6 * self.brain[4,5] + a7*self.brain[4,6] + a8*self.brain[4,7]+ a9*self.brain[4,8]+ a10 * self.brain[4,9] + a11 * self.brain[4,10] +a12 * self.brain[4,11] + a13 * self.brain[4,12] + a14 * self.brain[4,13] + a15 * self.brain[4,14] + a16*self.brain[4,15]
+                b2 = a1 * self.brain[5,0] + a2 * self.brain[5,1] +a3 * self.brain[5,2] + a4 * self.brain[5,3] + a5 * self.brain[5,4] + a6 * self.brain[5,5]+ a7*self.brain[5,6] + a8*self.brain[5,7]+ a9*self.brain[5,8]+ a10 * self.brain[5,9] + a11 * self.brain[5,10] +a12 * self.brain[5,11] + a13 * self.brain[5,12] + a14 * self.brain[5,13] + a15 * self.brain[5,14] + a16*self.brain[5,15]
+                b3 = a1 * self.brain[6,0] + a2 * self.brain[6,1] +a3 * self.brain[6,2] + a4 * self.brain[6,3] + a5 * self.brain[6,4] + a6 * self.brain[6,5]+ a7*self.brain[6,6] + a8*self.brain[6,7]+ a9*self.brain[6,8]+ a10 * self.brain[6,9] + a11 * self.brain[6,10] +a12 * self.brain[6,11] + a13 * self.brain[6,12] + a14 * self.brain[6,13] + a15 * self.brain[6,14] + a16*self.brain[6,15]
+                b4 = a1 * self.brain[7,0] + a2 * self.brain[7,1] +a3 * self.brain[7,2] + a4 * self.brain[7,3] + a5 * self.brain[7,4] + a6 * self.brain[7,5]+ a7*self.brain[7,6] + a8*self.brain[7,7]+ a9*self.brain[7,8]+ a10 * self.brain[7,9] + a11 * self.brain[7,10] +a12 * self.brain[7,11] + a13 * self.brain[7,12] + a14 * self.brain[7,13] + a15 * self.brain[7,14] + a16*self.brain[7,15]
+                b5 = a1 * self.brain[8,0] + a2 * self.brain[8,1] +a3 * self.brain[8,2] + a4 * self.brain[8,3] + a5 * self.brain[8,4] + a6 * self.brain[8,5]+ a7*self.brain[8,6] + a8*self.brain[8,7]+ a9*self.brain[8,8]+ a10 * self.brain[8,9] + a11 * self.brain[8,10] +a12 * self.brain[8,11] + a13 * self.brain[8,12] + a14 * self.brain[8,13] + a15 * self.brain[8,14] + a16*self.brain[8,15]
+                b6 = a1 * self.brain[9,0] + a2 * self.brain[9,1] +a3 * self.brain[9,2] + a4 * self.brain[9,3] + a5 * self.brain[9,4] + a6 * self.brain[9,5]+ a7*self.brain[9,6] + a8*self.brain[9,7]+ a9*self.brain[9,8]+ a10 * self.brain[9,9] + a11 * self.brain[9,10] +a12 * self.brain[9,11] + a13 * self.brain[9,12] + a14 * self.brain[9,13] + a15 * self.brain[9,14] + a16*self.brain[9,15]
 
-                c1 = b1 * self.brain[4,8]+b2*self.brain[5,8]+b3*self.brain[6,8] + b4 * self.brain[7,8]+ b5 * self.brain[8,8]+ b6 * self.brain[9,8]
-                c2 = b1 * self.brain[4,9]+b2*self.brain[5,9]+b3*self.brain[6,9] + b4 * self.brain[7,9]+ b5 * self.brain[8,9]+ b6 * self.brain[9,9]
-                c3 = b1 * self.brain[4,10]+b2*self.brain[5,10]+b3*self.brain[6,10] + b4 * self.brain[7,10]+ b5 * self.brain[8,10]+ b6 * self.brain[9,10]
-                c4 = b1 * self.brain[4,11]+b2*self.brain[5,11]+b3*self.brain[6,11] + b4 * self.brain[7,11]+ b5 * self.brain[8,11]+ b6 * self.brain[9,11]
-
-                output = c1 * self.brain[10,8]+ c2 * self.brain[10,9] + c3 * self.brain[10,10]+ c4 * self.brain[10,11]
+                output = b1 * self.brain[4,16] + b2 * self.brain[5,16] + b3 * self.brain[6,16] +b4 * self.brain[7,16] +b5 * self.brain[8,16] +b6 * self.brain[9,16]
+                
                 if output >= 1:
                         return 1
                 if output > -1 and output < 1:
@@ -293,7 +298,7 @@ def main():
 	global forwardprogress
 	global forward
 	parentgen = 0
-	learningrate = .5
+	learningrate = .09
         for currentGeneration in range (Generations):
                 run(0,obstacles,finish,child)
                 
