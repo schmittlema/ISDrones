@@ -1,0 +1,15 @@
+This file is used to save mazes for the karparthy game.
+Each maze is saved as a method in karparthygame.py
+Note: "enemy" in karparthygame.pyc needs to be set to Num_obstacles listed
+----------------------------------------------------------------
+
+Simple row maze (first!):
+Num_obstacles = 72
+ 
+   def makeMaze(self):
+        for i in range(0,35):
+            self.maze[i] = Point2(10 + (i*20),-5)
+        for i in range(35,70):
+            self.maze[i] = Point2(10 + ((i-35)*20),50)
+        self.maze[70] = Point2(700,15)
+        self.maze[71] = Point2(700,35)
