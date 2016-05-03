@@ -1,0 +1,7 @@
+This is a living document that changes with each iteration of the code.
+It tells you what needs to be added before next run of simulation.
+
+5/1/16:
+	-new maze
+	-report % succuss for past 10 restarts restart
+	-report # of restarts (basically generations)
