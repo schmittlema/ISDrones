@@ -5,3 +5,10 @@ It tells you what needs to be added before next run of simulation.
 	-new maze
 	-report % succuss for past 10 restarts restart
 	-report # of restarts (basically generations)
+
+5/3/16:
+	-fix assertion
+	-report % succuss for past 10 restarts restart
+	-report # of restarts (basically generations)
+
+

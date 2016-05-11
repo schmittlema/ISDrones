@@ -1,0 +1,10 @@
+strauss.udel.edu
+
+
+
+batch, chron
+
+screen
+
+installing pip locally
+
