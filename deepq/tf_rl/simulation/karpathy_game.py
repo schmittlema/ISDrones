@@ -10,7 +10,7 @@ from euclid import Circle, Point2, Vector2, LineSegment2
 import tf_rl.utils.svg as svg
 
 class GameObject(object):
-    def __init__(self, position, speed, obj_type, settings):
+    def __init__(self, position, speed, accel, obj_type, settings):
         """Esentially represents circles of different kinds, which have
         position and speed."""
         self.settings = settings
@@ -19,6 +19,7 @@ class GameObject(object):
         self.obj_type = obj_type
         self.position = position
         self.speed    = speed
+        self.accel    = accel
         self.bounciness = 1.0
 
     def wall_collisions(self):
@@ -33,8 +34,12 @@ class GameObject(object):
 
     def move(self, dt):
         """Move as if dt seconds passed"""
-        self.position += dt * self.speed
-        self.position = Point2(*self.position)
+        if not self.settings["add_physics"]:
+            self.position += dt * self.speed
+            self.position = Point2(*self.position)
+        else:
+            self.position += self.speed*dt + .5*self.accel*(dt**2)
+            self.speed+=self.accel*dt
 
     def step(self, dt):
         """Move and bounce of walls."""
@@ -58,9 +63,9 @@ class KarpathyGame(object):
                       LineSegment2(Point2(0,self.size[1]),             Point2(self.size[0], self.size[1])),
                       LineSegment2(Point2(self.size[0], self.size[1]), Point2(self.size[0], 0)),
                       LineSegment2(Point2(self.size[0], 0),            Point2(0,0))]
-
         self.hero = GameObject(Point2(*self.settings["hero_initial_position"]),
-                               Vector2(*self.settings["hero_initial_speed"]),
+                               Vector2(*self.settings["hero_initial_speed"]), 
+                               Vector2(*self.settings["hero_initial_accel"]),
                                "hero",
                                self.settings)
         self.maze = {}
@@ -115,8 +120,11 @@ class KarpathyGame(object):
     def perform_action(self, action_id):
         """Change speed to one of hero vectors"""
         assert 0 <= action_id < self.num_actions
-        self.hero.speed *= 0.5
-        self.hero.speed += self.directions[action_id] * self.settings["delta_v"]
+        if not self.settings["add_physics"]:
+            self.hero.speed *= 0.5
+            self.hero.speed += self.directions[action_id] * self.settings["delta_v"]
+        else:
+            self.hero.accel=self.directions[action_id] * self.settings["thrust"]
 
     def spawn_object(self, obj_type):
         """Spawn object of a given type and add it to the objects array"""
@@ -131,7 +139,7 @@ class KarpathyGame(object):
         max_speed = np.array(self.settings["maximum_speed"])
         speed = Vector2(0, 0)
 
-        self.objects.append(GameObject(position, speed, obj_type, self.settings))
+        self.objects.append(GameObject(position, speed, Vector2(0,0), obj_type, self.settings))
 
     def step(self, dt):
         """Simulate all the objects for a given ammount of time.
